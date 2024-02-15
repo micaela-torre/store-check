@@ -22,13 +22,11 @@ Clona este repositorio en tu máquina local:
 
 ```
 https://github.com/micaela-torre/store-check.git
-
 ```
 Navega al directorio del proyecto y cambia a la rama develop:
 ```
 cd store-check
 git checkout develop
-
 ```
 
 Instala las dependencias utilizando npm:

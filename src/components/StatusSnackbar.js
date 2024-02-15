@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Snackbar} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Snackbar } from 'react-native-paper';
 
-export const StatusSnackbar = ({message, type = 'success', setMessage}) => {
+export const StatusSnackbar = ({ message, type = 'success', setMessage }) => {
   const [visible, setVisible] = useState(false);
   const onDismissSnackBar = () => {
-    setVisible(false)
-    setMessage(null)
+    setVisible(false);
+    setMessage(null);
   };
 
   useEffect(() => {
@@ -15,7 +15,8 @@ export const StatusSnackbar = ({message, type = 'success', setMessage}) => {
       setVisible(false);
     };
   }, [message]);
-if(!message) return null
+
+  if (!message) return null;
   return (
     <View style={styles.container}>
       <Snackbar
@@ -26,9 +27,8 @@ if(!message) return null
           label: 'OK',
           onPress: onDismissSnackBar,
         }}
-        style={
-          type === 'success' ? styles.successSnackbar : styles.errorSnackbar
-        }>
+        style={type === 'success' ? styles.successSnackbar : styles.errorSnackbar}
+      >
         {message}
       </Snackbar>
     </View>

@@ -1,13 +1,6 @@
 import axios from 'axios';
 
-export const callApi = async ({
-  endpoint,
-  method = 'get',
-  params,
-  signal,
-  headers,
-  data,
-}) => {
+export const callApi = async ({ endpoint, method = 'get', params, signal, headers, data }) => {
   let api = `https://ikp-mobile-challenge-backend.up.railway.app/${endpoint}`;
   if (/https|http?/.test(endpoint)) api = endpoint;
   let response;
@@ -28,5 +21,5 @@ export const callApi = async ({
     throw error;
   }
 
-  return {...response};
+  return { ...response };
 };

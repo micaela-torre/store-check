@@ -1,10 +1,9 @@
-import Header from '../components/Header';
-import { useApiData } from '../hooks/useApiData';
-import { StoresServices } from '../services/stores.services';
-import { StoreItem } from '../components/StoreItem';
-import { Spinner } from '../components/Spinner';
-import { Container } from '../components/Container';
 import { PUBLIC_ROUTES } from '../models/routes';
+import { Spinner } from '../components/Spinner';
+import { StoreItem } from '../components/StoreItem';
+import { StoresServices } from '../services/stores.services';
+import { useApiData } from '../hooks/useApiData';
+import { ContainerHeader } from '../components/ContainerHeader';
 
 const HomeScreen = ({ navigation }) => {
   const { data, isLoading } = useApiData({ service: StoresServices.getAllStores });
@@ -15,14 +14,9 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <Container>
-      <Header title="Stores List" />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        data?.map(store => <StoreItem key={`store_${store.id}`} goToStore={() => handlerGoToStoreDetails(store.id)} {...store} />)
-      )}
-    </Container>
+    <ContainerHeader title="Stores List">
+      {isLoading ? <Spinner /> : data?.map(store => <StoreItem key={`store_${store.id}`} goToStore={() => handlerGoToStoreDetails(store.id)} {...store} />)}
+    </ContainerHeader>
   );
 };
 

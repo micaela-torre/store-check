@@ -1,14 +1,15 @@
-import React, {Suspense} from 'react';
-import {Container} from './src/components/Container';
-import {Navigation} from './src/navigation/Navigation';
+import React from 'react';
+import { Container } from './src/components/Container';
+import { Navigation } from './src/navigation/Navigation';
+import { PaperProvider } from 'react-native-paper';
 
 const App = () => {
   return (
-    <Suspense fallback={<h1>Cargando...</h1>}>
+    <PaperProvider>
       <Container>
         <Navigation />
       </Container>
-    </Suspense>
+    </PaperProvider>
   );
 };
 

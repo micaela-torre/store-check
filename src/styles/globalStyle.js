@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {theme} from '../constants/theme';
+import { StyleSheet } from 'react-native';
+import { theme } from '../constants/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     fontWeight: theme.fonts.customVariant.fontWeight,
     letterSpacing: theme.fonts.customVariant.letterSpacing,
     lineHeight: theme.fonts.customVariant.lineHeight,
+    margin: theme.fonts.customVariant.margin,
   },
 });
 

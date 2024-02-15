@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Container } from '../components/Container';
-import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { TaskItem } from '../components/TaskItem';
 import { StoresServices } from '../services/stores.services';
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusSnackbar } from '../components/StatusSnackbar';
+import { StoreDetailsText } from '../constants/generalText';
+import styles from '../styles/globalStyle';
+import { ContainerHeader } from '../components/ContainerHeader';
 
 const StoreDetails = ({ route }) => {
   const {
@@ -27,35 +28,36 @@ const StoreDetails = ({ route }) => {
 
   const handlerCheckInTask = async (storeId, taskId, taskDescription, e) => {
     const data = { storeId, taskId };
-    let messageError = 'An error occurred while assigning the task.';
+    let messageError = StoreDetailsText.messageErrorGeneral;
     try {
       if (!openStore) {
-        messageError = "You can't assign yourself because the store is closed";
+        messageError = StoreDetailsText.messageErrorStoreClosed;
         throw new Error(messageError);
       }
       if (dataTasks?.find(task => task.id === taskId)?.assigned) {
-        messageError = 'This task has already been assigned';
+        messageError = StoreDetailsText.messageErrorStoreAssigend;
         throw new Error(messageError);
       }
 
       await StoresServices.checkInStore({ data });
-      await saveTaskDescription(taskDescription);
+      await saveTaskDescription(taskDescription, taskId);
       updateDataTask(taskId, e);
-      setSnackbarData({ message: 'The task was assigned successfully :)', type: 'success' });
+      setSnackbarData({ message: StoreDetailsText.messageSuccesGeneral, type: 'success' });
     } catch (e) {
       setSnackbarData({ message: messageError, type: 'error' });
     }
   };
 
-  const saveTaskDescription = async taskDescription => {
+  const saveTaskDescription = async (description, id) => {
     try {
+      const newTask = { description, id };
       const currentTasks = await AsyncStorage.getItem('tasks');
       let parsedTasks = currentTasks ? JSON.parse(currentTasks) : [];
-      const existTaskInStorage = parsedTasks?.includes(taskDescription);
-      if (existTaskInStorage) {
-        parsedTasks = parsedTasks?.filter(task => task !== taskDescription);
+
+      if (parsedTasks.some(task => task.id === id)) {
+        parsedTasks = parsedTasks?.filter(task => task.id !== id);
       } else {
-        parsedTasks.push(taskDescription);
+        parsedTasks.push(newTask);
       }
       await AsyncStorage.setItem('tasks', JSON.stringify(parsedTasks));
     } catch (error) {
@@ -66,19 +68,13 @@ const StoreDetails = ({ route }) => {
   const handlerGoBack = () => navigation.goBack();
 
   return (
-    <Container>
-      <Header title={name} goBack={handlerGoBack} />
-      <Text m={2}>Let's get started! Choose a task for today</Text>
+    <ContainerHeader title={name} goBack={handlerGoBack}>
+      <Text style={styles.text}>{StoreDetailsText.title}</Text>
       {dataTasks?.map(task => (
-        <TaskItem
-          key={`task:${task.id}`}
-          {...task}
-          checkInTask={e => handlerCheckInTask(id, task.id, task.description, e)}
-          disabled={!openStore}
-        />
+        <TaskItem key={`task:${task.id}`} {...task} checkInTask={handlerCheckInTask} disabled={!openStore} storeId={id} {...task} />
       ))}
       <StatusSnackbar message={snackbarData?.message} type={snackbarData?.type} setMessage={setSnackbarData} />
-    </Container>
+    </ContainerHeader>
   );
 };
 
